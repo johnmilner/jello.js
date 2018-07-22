@@ -152,7 +152,8 @@ export default class Jello {
       // Stetch the fullscreen
       // videoSprite.width = app.screen.width;
       // videoSprite.height = app.screen.height;
-
+      videoSprite.autoPlay = true;
+      videoSprite.loop = true; 
       // Set image anchor to the center of the image
       videoSprite.anchor.x = 0.5;
       videoSprite.anchor.y = 0.5;      
