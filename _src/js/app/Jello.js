@@ -144,7 +144,7 @@ export default class Jello {
     this.bgArray.map((image) => {
       //const bg = PIXI.Sprite.fromImage(`/assets/images/bg/${image}.jpg`);
       // create a video texture from a path
-      var bg = PIXI.Texture.fromVideo('/assets/images/bg/${image}.mp4');
+      var bg = PIXI.Texture.fromVideo(`/assets/images/bg/${image}.mp4`);
 
       // create a new Sprite using the video texture (yes it's that easy)
       var videoSprite = new PIXI.Sprite(bg);
