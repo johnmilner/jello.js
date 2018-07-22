@@ -23,7 +23,7 @@ export default class Jello {
     this.raf = this.animateFilters.bind(this);
     //this.cycleImage = this.changeImage.bind(this)
 
-    this.isDistorted = true;
+    this.isDistorted = false; // begin transition with no distortion
     this.isTransitioning = false;
 
     this.initialize();
@@ -46,10 +46,10 @@ export default class Jello {
     // An array of images for background (.jpg)
     // They'll transition in the order listed below
     this.bgArray.push(
-      '1-hd',
-      '2-hd',
-      '3-hd',
-      '4-hd'
+      'image-1',
+      'image-2',
+      'image-3',
+      'image-4'
     );
 
     // An array of displacement maps
@@ -121,11 +121,10 @@ export default class Jello {
 
     this.bgSpriteArray.map((sprite, i) => {
       if(i == this.imageCounter) {
-        TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut});
-        this.toggleDistortion()
+        TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortion, onCompleteScope: this});
+        
       } else {
-        TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
-        this.toggleDistortion()
+        TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut, onComplete: this.toggleDistortion, onCompleteScope: this});
       }
     });
   }
@@ -148,27 +147,32 @@ export default class Jello {
   // preload all backgrounds for quick transitions
   createBackgrounds() {
     this.bgArray.map((image) => {
-      //const bg = PIXI.Sprite.fromImage(`/assets/images/bg/${image}.jpg`);
+      const bg = PIXI.Sprite.fromImage(`/assets/images/bg/${image}.jpg`);
       // create a video texture from a path
-      var bg = PIXI.Texture.fromVideo(`/assets/images/bg/${image}.mp4`);
+      //var bg = PIXI.Texture.fromVideo(`/assets/images/bg/${image}.mp4`);
 
       // create a new Sprite using the video texture (yes it's that easy)
-      var videoSprite = new PIXI.Sprite(bg);
+      // var videoSprite = new PIXI.Sprite(bg);
 
-      // Stetch the fullscreen
-      // videoSprite.width = app.screen.width;
-      // videoSprite.height = app.screen.height;
-      videoSprite.autoPlay = true;
-      videoSprite.loop = true; 
-      // Set image anchor to the center of the image
-      videoSprite.anchor.x = 0.5;
-      videoSprite.anchor.y = 0.5;      
+      // // Stetch the fullscreen
+      // // videoSprite.width = app.screen.width;
+      // // videoSprite.height = app.screen.height;
+      // videoSprite.autoPlay = true;
+      // videoSprite.loop = true; 
+      // // Set image anchor to the center of the image
+      // videoSprite.anchor.x = 0.5;
+      // videoSprite.anchor.y = 0.5;      
+      bg.anchor.x = 0.5;
+      bg.anchor.y = 0.5;  
 
-      this.imgContainer.addChild(videoSprite);
-      this.bgSpriteArray.push(videoSprite);
+      // this.imgContainer.addChild(videoSprite);
+      // this.bgSpriteArray.push(videoSprite);
+
+      this.imgContainer.addChild(bg);
+      this.bgSpriteArray.push(bg);
 
       // set first image alpha to 1, all else to 0
-      videoSprite.alpha = this.bgSpriteArray.length === 1 ? 1 : 0;
+      bg.alpha = this.bgSpriteArray.length === 1 ? 1 : 0;
     });
   }
 
