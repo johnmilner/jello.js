@@ -33,7 +33,7 @@ export default class Jello {
     console.log('Jello initialized')
 
     this.defaults = {
-      transition: 1,
+      transition: 0,
       speed: 0.5,
       dispScale: 200,
       dispX: true,
@@ -47,7 +47,9 @@ export default class Jello {
     // They'll transition in the order listed below
     this.bgArray.push(
       '1-hd',
-      '2-hd'
+      '2-hd',
+      '3-hd',
+      '4-hd'
     );
 
     // An array of displacement maps
@@ -200,7 +202,16 @@ export default class Jello {
   // scroll events
 
   initScroll() {
-    window.addEventListener('wheel', () => this.changeImage())
+    window.addEventListener('wheel', (e) => {
+      if (e.deltaY > 0) {
+      this.changeImage()
+      console.log('scrolling down')
+      }
+      if (e.deltaY < 0) {
+      this.changeImage()
+      console.log('scrolling up')
+      }
+    })
     
     // function(e) {
     //   if (e.deltaY > 0) {
