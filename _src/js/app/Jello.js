@@ -21,6 +21,7 @@ export default class Jello {
     this.mapCounter = 0;
     this.mapArray = [];
     this.raf = this.animateFilters.bind(this);
+    //this.cycleImage = this.changeImage.bind(this)
 
     this.isDistorted = true;
     this.isTransitioning = false;
@@ -70,6 +71,7 @@ export default class Jello {
     this.createFilters();
     this.animateFilters();
     this.eventListener();
+    this.initScroll();
 
     this.renderer.view.setAttribute('class', 'jello-canvas');
     this.canvasHolder.appendChild(this.renderer.view);
@@ -118,8 +120,10 @@ export default class Jello {
     this.bgSpriteArray.map((sprite, i) => {
       if(i == this.imageCounter) {
         TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut});
+        this.toggleDistortion()
       } else {
         TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
+        this.toggleDistortion()
       }
     });
   }
@@ -193,6 +197,44 @@ export default class Jello {
     }
   }
 
+  // scroll events
+
+  initScroll() {
+    window.addEventListener('wheel', () => this.changeImage())
+    
+    // function(e) {
+    //   if (e.deltaY > 0) {
+    //     console.log('scrolling down');
+    //     document.getElementById('status').innerHTML = 'scrolling down';
+    //     // if(timer) {
+    //     //   window.clearTimeout(timer);
+    //     // }
+    //     // timer = window.setTimeout(function() {
+    //     //   // actual code here. Your call back function.
+    //     // next();
+    //     // console.log( "Firing!" );
+    //     // }, 100);
+    //     this.changeImage();
+    //   }
+    
+      // if (e.deltaY < 0) {
+      //   console.log('scrolling up');
+      //   document.getElementById('status').innerHTML = 'scrolling up';
+      //   // if(timer) {
+      //   // window.clearTimeout(timer);
+      //   // }
+      //   // timer = window.setTimeout(function() {
+      //   //   // actual code here. Your call back function.
+      //   // prev();
+      //   // console.log( "Firing!" );
+      //   // }, 100);
+        
+      //   this.changeImage();
+      // }
+      
+      // })
+
+  }
   // click events
   eventListener() {
     const changeImageBtn = document.getElementsByClassName('js-change-image')[0];
@@ -210,7 +252,9 @@ export default class Jello {
     toggleDistorionBtn.onclick = () => {
       this.toggleDistortion();
     }
-  }
+  
+}
+
 
   // turn the distortion on and off using the options.transistion variable
   toggleDistortion() {
@@ -236,4 +280,13 @@ export default class Jello {
     this.bgArray = [];
     this.bgSpriteArray = [];
   }
+
+  
+
 }
+
+function unloadScrollBars() {
+  document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+  document.body.scroll = "no"; // ie only
+  }
+  unloadScrollBars()
