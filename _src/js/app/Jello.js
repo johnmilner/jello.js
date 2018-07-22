@@ -121,10 +121,11 @@ export default class Jello {
 
     this.bgSpriteArray.map((sprite, i) => {
       if(i == this.imageCounter) {
-        TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortion, onCompleteScope: this});
+        this.toggleDistortion(TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut}))
         
       } else {
-        TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut, onComplete: this.toggleDistortion, onCompleteScope: this});
+        this.toggleDistortion(TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut}))
+        // TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
       }
     });
   }
@@ -272,14 +273,16 @@ export default class Jello {
 
 
   // turn the distortion on and off using the options.transistion variable
-  toggleDistortion() {
-    if(this.isDistorted) {
-      this.distortionLevel(0);
-      this.isDistorted = false;
-    } else {
+  toggleDistortion(callback) {
+    if(!this.isDistorted) {
       this.distortionLevel(1);
       this.isDistorted = true;
+    } else {
+      this.distortionLevel(0);
+      this.isDistorted = false;
     }
+    if(typeof callback == "function") 
+    callback();
   }
 
   // Object.assign overwrites defaults with options to create settings
