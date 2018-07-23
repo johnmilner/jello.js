@@ -120,12 +120,11 @@ export default class Jello {
     }
 
     this.bgSpriteArray.map((sprite, i) => {
-      if(i == this.imageCounter) {
-        this.toggleDistortion(TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut}))
-        
+      if(i === this.imageCounter) {
+        this.toggleDistortionIn(1, TweenLite.to(sprite, 3, {alpha: 1, ease:Power2.easeInOut,onComplete: this.toggleDistortionOut(0), onCompleteScope: this}));
+        //TweenLite.to(sprite, 1, {onComplete: this.toggleDistortionOut(0), onCompleteScope: this})
       } else {
-        this.toggleDistortion(TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut}))
-        // TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
+        this.toggleDistortionOut(0, TweenLite.to(sprite, 3, {alpha: 0, ease:Power2.easeInOut,onComplete: this.toggleDistortionIn(1), onCompleteScope: this}));
       }
     });
   }
@@ -273,16 +272,37 @@ export default class Jello {
 
 
   // turn the distortion on and off using the options.transistion variable
-  toggleDistortion(callback) {
-    if(!this.isDistorted) {
-      this.distortionLevel(1);
+  // toggleDistortion(dis, callback) {
+  //   if(!this.isDistorted) {
+  //     this.distortionLevel(dis);
+  //     this.isDistorted = true;
+  //   } else {
+  //     this.distortionLevel(dis);
+  //     this.isDistorted = false;
+  //   }
+  //   if(typeof callback == "function") 
+  //   callback();
+  // }
+
+  toggleDistortionIn(dis, callback) {
+    //if(!this.isDistorted) {
+      this.distortionLevel(dis);
       this.isDistorted = true;
-    } else {
-      this.distortionLevel(0);
+      console.log('distortion in')
+
+      // if(typeof callback == "function") 
+      // callback();
+    //} 
+  }
+
+  toggleDistortionOut(dis, callback) {
+    //if(this.isDistorted) {
+      this.distortionLevel(dis);
       this.isDistorted = false;
-    }
-    if(typeof callback == "function") 
-    callback();
+      console.log('distortion out')
+      // if(typeof callback == "function") 
+      // callback();
+    //} 
   }
 
   // Object.assign overwrites defaults with options to create settings
