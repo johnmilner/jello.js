@@ -119,12 +119,17 @@ export default class Jello {
       this.imageCounter = 0;
     }
 
-    this.bgSpriteArray.map((sprite, i) => {
-      if(i === this.imageCounter) {
-        this.toggleDistortionIn(1, TweenLite.to(sprite, 3, {alpha: 1, ease:Power2.easeInOut,onComplete: this.toggleDistortionOut(0), onCompleteScope: this}));
-        //TweenLite.to(sprite, 1, {onComplete: this.toggleDistortionOut(0), onCompleteScope: this})
+    this.bgSpriteArray.map((sprite, i, callback) => {
+      // if(i === this.imageCounter) {
+      //   this.toggleDistortionIn(TweenLite.to(sprite, 3, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortionOut(0), onCompleteScope: this}));
+      //   //TweenLite.to(sprite, 1, {onComplete: this.toggleDistortionOut(0), onCompleteScope: this})
+      // } else {
+      //   this.toggleDistortionOut(TweenLite.to(sprite, 3, {alpha: 0, ease:Power2.easeInOut,onComplete: this.toggleDistortionIn(1), onCompleteScope: this}));
+      // }
+      if(i == this.imageCounter) {
+        TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortionOut, onCompleteScope: this});
       } else {
-        this.toggleDistortionOut(0, TweenLite.to(sprite, 3, {alpha: 0, ease:Power2.easeInOut,onComplete: this.toggleDistortionIn(1), onCompleteScope: this}));
+        TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
       }
     });
   }
@@ -208,46 +213,16 @@ export default class Jello {
   initScroll() {
     window.addEventListener('wheel', (e) => {
       if (e.deltaY > 0) {
-      this.changeImage()
+      this.toggleDistortionIn(1, this.changeImage.bind(this))
+      // this.changeImage()
       console.log('scrolling down')
       }
       if (e.deltaY < 0) {
-      this.changeImage()
+      this.toggleDistortionIn(1, this.changeImage.bind(this))
+      // this.changeImage()
       console.log('scrolling up')
       }
     })
-    
-    // function(e) {
-    //   if (e.deltaY > 0) {
-    //     console.log('scrolling down');
-    //     document.getElementById('status').innerHTML = 'scrolling down';
-    //     // if(timer) {
-    //     //   window.clearTimeout(timer);
-    //     // }
-    //     // timer = window.setTimeout(function() {
-    //     //   // actual code here. Your call back function.
-    //     // next();
-    //     // console.log( "Firing!" );
-    //     // }, 100);
-    //     this.changeImage();
-    //   }
-    
-      // if (e.deltaY < 0) {
-      //   console.log('scrolling up');
-      //   document.getElementById('status').innerHTML = 'scrolling up';
-      //   // if(timer) {
-      //   // window.clearTimeout(timer);
-      //   // }
-      //   // timer = window.setTimeout(function() {
-      //   //   // actual code here. Your call back function.
-      //   // prev();
-      //   // console.log( "Firing!" );
-      //   // }, 100);
-        
-      //   this.changeImage();
-      // }
-      
-      // })
 
   }
   // click events
@@ -286,22 +261,28 @@ export default class Jello {
 
   toggleDistortionIn(dis, callback) {
     //if(!this.isDistorted) {
+      if (!dis) {
+        this.distortionLevel(1);
+      }
       this.distortionLevel(dis);
       this.isDistorted = true;
       console.log('distortion in')
 
-      // if(typeof callback == "function") 
-      // callback();
+      if(typeof callback == "function") 
+      callback();
     //} 
   }
 
   toggleDistortionOut(dis, callback) {
     //if(this.isDistorted) {
+      if (!dis) {
+        this.distortionLevel(0);
+      }
       this.distortionLevel(dis);
       this.isDistorted = false;
       console.log('distortion out')
-      // if(typeof callback == "function") 
-      // callback();
+      if(typeof callback == "function") 
+      callback();
     //} 
   }
 
