@@ -15,7 +15,7 @@ export default class Jello {
     this.stage = new PIXI.Container();
     this.imgContainer = new PIXI.Container();
     this.imageCounter = 0;
-    this.displacementSprite = PIXI.Sprite.fromImage('/assets/images/distortion/dmap-clouds-01.jpg');
+    this.displacementSprite = PIXI.Sprite.fromImage('/assets/images/distortion/clouds.jpg');
     this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
     this.currentMap = {};
     this.mapCounter = 0;
@@ -120,16 +120,11 @@ export default class Jello {
     }
 
     this.bgSpriteArray.map((sprite, i, callback) => {
-      // if(i === this.imageCounter) {
-      //   this.toggleDistortionIn(TweenLite.to(sprite, 3, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortionOut(0), onCompleteScope: this}));
-      //   //TweenLite.to(sprite, 1, {onComplete: this.toggleDistortionOut(0), onCompleteScope: this})
-      // } else {
-      //   this.toggleDistortionOut(TweenLite.to(sprite, 3, {alpha: 0, ease:Power2.easeInOut,onComplete: this.toggleDistortionIn(1), onCompleteScope: this}));
-      // }
+
       if(i == this.imageCounter) {
-        TweenLite.to(sprite, 1, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortionOut, onCompleteScope: this});
+        TweenLite.to(sprite, 2, {alpha: 1, ease:Power2.easeInOut, onComplete: this.toggleDistortionOut, onCompleteScope: this});
       } else {
-        TweenLite.to(sprite, 1, {alpha: 0, ease:Power2.easeInOut});
+        TweenLite.to(sprite, 2, {alpha: 0, ease:Power2.easeInOut});
       }
     });
   }
